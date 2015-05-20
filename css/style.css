@@ -1,0 +1,35 @@
+
+header{
+	position: absolute;
+	top:0;
+	left: 0;
+	right: 0;
+  height: 120px;
+	border-bottom: 1px solid #000 ;
+  background-color: #4BC7E4;
+  padding-left: 120px;
+}
+
+section{
+	position: absolute;
+	top:120px;
+	left: 0;
+	right: 0;
+	bottom:0;
+	background: #fff;
+  padding: 20px 120px;
+}
+.hide{
+  display: none;
+}
+section input[type='text']{
+  width: 250px;
+  margin: 20px 0 50px;
+}
+th {
+  font-weight: bold;
+  color: #265a88;
+}
+.selecttt{
+  width: 300px;
+}
