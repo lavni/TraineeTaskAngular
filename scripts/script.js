@@ -87,10 +87,6 @@ myAppModule.controller('PersonController',
             $('header button').toggleClass('btn-default');
         };
 
-        // $scope.getIcon = function(column){
-        //     if 
-        // }
-
         $scope.sort = {
           active: '',
           descending: undefined
@@ -114,10 +110,22 @@ myAppModule.controller('PersonController',
               ? 'glyphicon-chevron-down'
               : 'glyphicon-chevron-up';
             }
-
-          //return 'glyphicon';
         }
-});
+        
+        $scope.n = 0;
+        $scope.setNumber = function(){
+           $( "#selectNumber" ).change(function() {
+                var a = $('#selectNumber option:selected').val();
+                if (a === 'fax') {
+                    //$('#num').html('{{person.phoneNumber[1].number}}')
+                    $scope.n = 1;
+                } else {
+                   // $('#num').html('{{person.phoneNumber[0].number}}')
+                   $scope.n = 0;
+                }
+            });
+           return $scope.n;
+        }
+ });
 
 
- 
