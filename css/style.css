@@ -19,9 +19,9 @@ section{
 	background: #fff;
   padding: 20px 120px;
 }
-.hide{
+/*.hide{
   display: none;
-}
+}*/
 section input[type='text']{
   width: 250px;
   margin: 20px 0 50px;
@@ -29,7 +29,15 @@ section input[type='text']{
 th {
   font-weight: bold;
   color: #265a88;
+  vertical-align: middle;
 }
-.selecttt{
+.select{
   width: 300px;
+}
+
+th a i{
+  /*position: relative !important;*/
+  top: 3px !important;
+  left: 3px;
+
 }

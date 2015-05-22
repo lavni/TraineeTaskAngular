@@ -1,11 +1,14 @@
-function hide(){
-    $('section').toggleClass('hide');
-    $('header button').toggleClass('btn-primary');
-    $('header button').toggleClass('btn-default');
-}
+// function hide(){
+//     $('section').toggleClass('hide');
+//     $('header button').toggleClass('btn-primary');
+//     $('header button').toggleClass('btn-default');
+// }
 
-function PersonController($scope) {
-    $scope.persons = [
+var myAppModule = angular.module('MyApp', []);
+
+myAppModule.controller('PersonController',
+    function($scope) {
+        $scope.persons = [
         {
             "firstName": "John",
             "lastName": "Smith",
@@ -77,8 +80,44 @@ function PersonController($scope) {
         }
     ];
 
-    // $scope.remove = function(index){
-    // $scope.items.splice(index, 1);
-    // }
-}
+        $scope.hide = false;
+        $scope.toggleContent = function(){
+            $scope.hide = !$scope.hide;
+            $('header button').toggleClass('btn-primary');
+            $('header button').toggleClass('btn-default');
+        };
 
+        // $scope.getIcon = function(column){
+        //     if 
+        // }
+
+        $scope.sort = {
+          active: '',
+          descending: undefined
+        }     
+
+        $scope.changeSorting = function(column) {
+          var sort = $scope.sort;
+          if (sort.active == column) {
+             sort.descending = !sort.descending;
+          } 
+          else {
+            sort.active = column;
+            sort.descending = false;
+          }
+        };
+
+        $scope.getIcon = function(column) {
+          var sort = $scope.sort;
+          if (sort.active == column) {
+            return sort.descending
+              ? 'glyphicon-chevron-down'
+              : 'glyphicon-chevron-up';
+            }
+
+          //return 'glyphicon';
+        }
+});
+
+
+ 
