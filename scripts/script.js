@@ -11,6 +11,7 @@ myAppModule.factory('Persons', function() {
     persons.query = function() {
         return [
             {
+                "id": 13457,
                 "firstName": "John",
                 "lastName": "Smith",
                 "age": 25,
@@ -34,6 +35,7 @@ myAppModule.factory('Persons', function() {
                     ]
             },
             {
+                "id": 76578,
                 "firstName": "Simona",
                 "lastName": "Morasca",
                 "age": 22,
@@ -57,6 +59,7 @@ myAppModule.factory('Persons', function() {
                     ]
             },
             {
+                "id": 12583,
                 "firstName": "Josephine",
                 "lastName": "Darakjy",
                 "age": 33,
@@ -88,17 +91,29 @@ myAppModule.controller('PersonController',
     function(Persons, $scope) {
         $scope.persons = Persons.query();
 
-        $scope.hide = false;
-        $scope.toggleContent = function(){
-            $scope.hide = !$scope.hide;
-            $('header button').toggleClass('btn-primary');
-            $('header button').toggleClass('btn-default');
-        };
+        // $scope.hide = true;
+         $scope.toggleContent = function(){
+             
+             $('header a').toggleClass('btn-primary');
+             $('header a').toggleClass('btn-default');
+             if ($('header a').text() === 'Show Content') {
+                $('header a').text('Hide Content');
+                $('header a').attr('href', '#/list');
+             // } else if (($('header a').text() === 'Show Content') && ($('header a').attr('id') === 'person')){
+             //    $('header a').text('Hide Content');
+             //    $('header a').attr('href', '#/person/{{person.id}}');
+             // 
+            } else {
+                $('header a').text('Show Content');
+                $('header a').attr('href', '#/');
+             }
+             //$scope.hide = !$scope.hide;
+         };
 
         $scope.sort = {
           active: '',
           descending: undefined
-        }     
+        }  
 
         $scope.changeSorting = function(column) {
           var sort = $scope.sort;
@@ -136,14 +151,76 @@ myAppModule.controller('PersonController',
         }
 
         $scope.showLast = false;
-        $scope.openInfo = function(index){
-            $scope.person = $scope.persons[index];
-            $scope.showLast = false;
+        $scope.openInfo = function(id){
+            for (var i=0; i < $scope.persons.length; i++){
+                if ($scope.persons[i].id === id){
+                    $scope.person = $scope.persons[i];
+                    $scope.showLast = false;
+                }
+            }
         }
         $scope.save = function(){
             $scope.showLast = true;
         }
 
+
  });
 
+myAppModule.directive('canceltext', function(){
+    return {
+       link: function postLink($scope, iElement, iAttrs){
+        iElement.text(iAttrs.canceltext);
+       }
+    }
+});
+myAppModule.directive('submittext', function(){
+    return {
+       link: function postLink($scope, iElement, iAttrs){
+        iElement.text(iAttrs.submittext);
+       }
+    }
+});
+myAppModule.directive('oncancel', function(){
+    return {
+       link: function postLink($scope, iElement, iAttrs){
+        iElement.attr('data-dismiss','modal' );
+       }
+    }
+});
+myAppModule.directive('onsubmit', function(){
+    return {
+        link: function postLink($scope, iElement, iAttrs){
+        iElement.attr('data-dismiss','modal');
+        }
+    }
+});
 
+myAppModule.config(['$routeProvider', function($routeProvider) {
+    $routeProvider.
+        when('/list', {
+          templateUrl: 'list.html',
+          controller: 'PersonController'
+        }).
+        when('/person/:id', {
+          templateUrl: 'template.html',
+          controller: 'EditController'
+        }).
+        otherwise({
+          redirectTo: '/'
+        });
+}]);
+
+myAppModule.controller('EditController', function(Persons, $scope, $routeParams){
+    $scope.person_id = $routeParams.id;
+    $scope.persons = Persons.query();
+    function search(){
+        for (var i=0; i < $scope.persons.length; i++){
+            if (+$scope.persons[i].id === +$scope.person_id){
+            $scope.editPerson = $scope.persons[i];
+            }
+        }
+    }
+    search();
+
+
+});

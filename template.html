@@ -1,0 +1,42 @@
+<form class="formEdit">
+  <h1>Edit person: {{editPerson.firstName + ' ' + editPerson.lastName}}</h1>
+  <hr>
+  <div class="col-md-6">
+    <div class="form-group">
+      <label for="age">Age * </label>
+      <input type="number" class="form-control" id="age" ng-model="editPerson.age">
+    </div>
+    <div class="form-group">
+      <label for="street">Street</label>
+      <input type="text" class="form-control" id="street" ng-model="editPerson.address.streetAddress">
+    </div>
+    <div class="form-group">
+      <label for="city">City *</label>
+      <input type="text" class="form-control" id="city" ng-model="editPerson.address.city">
+    </div>
+    <div class="form-group">
+      <label for="state">State</label>
+      <input type="text" class="form-control" id="state" ng-model="editPerson.address.state">
+    </div>
+  </div>
+  <div class="col-md-6">
+    <div class="form-group">
+      <label for="postalCode">Postal Code</label>
+      <input type="text" class="form-control" id="postalCode" ng-model="editPerson.address.postalCode">
+    </div>
+    <div class="form-group">
+      <label for="homeNumber">Home number *</label>
+      <input type="text" class="form-control" id="homeNumber" ng-model="editPerson.phoneNumber[0].number">
+    </div>
+    <div class="form-group">
+      <label for="faxNumber">Fax Number *</label>
+      <input type="text" class="form-control" id="faxNumber" ng-model="editPerson.phoneNumber[0].number">
+    </div>
+  </div>
+  <div class="col-md-12">
+    <hr>
+    <a type="button" class="btn btn-default" href="#/list/">Cancel</a>
+    <a type="button" class="btn btn-primary" ng-click="update()" disabled>Update</a>
+  </div>
+    
+</form>

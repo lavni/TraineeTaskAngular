@@ -20,9 +20,9 @@ section{
   padding: 20px 120px;
 }
 
-section input[type='text']{
+section input#filter{
   width: 250px;
-  margin: 20px 0 50px;
+  margin: 20px 0 50px 10px;
 }
 th {
   font-weight: bold;
@@ -40,4 +40,13 @@ th a i{
 }
 .modal-dialog{
   margin-top: 10%;
+}
+.formEdit{
+  width: 60%;
+}
+.formEdit h1{
+  padding-left: 15px;
+} 
+.formEdit .col-md-12{
+  text-align: right;
 }
