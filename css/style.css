@@ -42,11 +42,15 @@ th a i{
   margin-top: 10%;
 }
 .formEdit{
-  width: 60%;
+  width: 70%;
 }
 .formEdit h1{
   padding-left: 15px;
 } 
 .formEdit .col-md-12{
   text-align: right;
+}
+.formEdit button+span{
+  display:block;
+  margin-top: 10px;
 }

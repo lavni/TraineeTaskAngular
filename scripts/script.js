@@ -221,6 +221,14 @@ myAppModule.controller('EditController', function(Persons, $scope, $routeParams)
         }
     }
     search();
+    // $scope.update = function(editPerson){
+    //     $scope.persons[$scope.person_id] = angular.copy(editPerson);
+    // }
 
-
+    $scope.invalid = function(){
+        $('input.ng-invalid').parent().addClass('has-error');
+        $('input.ng-valid').parent().removeClass('has-error');
+        $('.formEdit').find('span').addClass('text-danger');
+    }
 });
+//ng-pattern="^(\+\d{1,2}\s)?\(?\d{3}\)?[\s.-]\d{3}[\s.-]\d{4}$"

@@ -1,42 +1,61 @@
-<form class="formEdit">
+<form class="formEdit" name="form" novalidate ng-submit="update(editPerson)">
   <h1>Edit person: {{editPerson.firstName + ' ' + editPerson.lastName}}</h1>
   <hr>
   <div class="col-md-6">
     <div class="form-group">
-      <label for="age">Age * </label>
-      <input type="number" class="form-control" id="age" ng-model="editPerson.age">
+      <label class="control-label" for="age">Age * </label>
+      <input type="number" class="form-control" name="age" id="age" ng-model="editPerson.age" ng-change="invalid()" max='199' min='1' required="">
+       <div ng-show="form.age.$dirty && form.age.$invalid">
+        <span ng-show="form.age.$error.required">Age is required.</span>
+        <span ng-show="form.age.$error.min">Age should be more than 0.</span>
+        <span ng-show="form.age.$error.max">Unfortunately 199 years is our current system limit.<br>Please contact Laws of Nature in case of questions.</span>
+      </div>
     </div>
     <div class="form-group">
-      <label for="street">Street</label>
-      <input type="text" class="form-control" id="street" ng-model="editPerson.address.streetAddress">
+      <label class="control-label" for="street">Street</label>
+      <input type="text" class="form-control" name="street" id="street" ng-model="editPerson.address.streetAddress">
     </div>
     <div class="form-group">
-      <label for="city">City *</label>
-      <input type="text" class="form-control" id="city" ng-model="editPerson.address.city">
+      <label class="control-label" for="city">City *</label>
+      <input type="text" class="form-control" name="city" id="city" ng-model="editPerson.address.city" ng-change="invalid()" ng-minlength="3" ng-maxlength="49" required>
+      <div ng-show="form.city.$dirty && form.city.$invalid">
+        <span ng-show="form.city.$error.required">City is required.</span>
+        <span ng-show="form.city.$error.minlength">City name should be more than 2 characters.</span>
+        <span ng-show="form.city.$error.maxlength">City name should be less than 50 characters.</span>
+      </div>
     </div>
     <div class="form-group">
-      <label for="state">State</label>
-      <input type="text" class="form-control" id="state" ng-model="editPerson.address.state">
+      <label class="control-label" for="state">State</label>
+      <input type="text" class="form-control" name="state" id="state" ng-model="editPerson.address.state" ng-change="invalid()" >
     </div>
   </div>
   <div class="col-md-6">
     <div class="form-group">
-      <label for="postalCode">Postal Code</label>
-      <input type="text" class="form-control" id="postalCode" ng-model="editPerson.address.postalCode">
+      <label class="control-label" for="postalCode">Postal Code</label>
+      <input type="text" class="form-control" name="postalCode" id="postalCode" ng-model="editPerson.address.postalCode" ng-change="invalid()" >
     </div>
     <div class="form-group">
-      <label for="homeNumber">Home number *</label>
-      <input type="text" class="form-control" id="homeNumber" ng-model="editPerson.phoneNumber[0].number">
+      <label class="control-label" for="homeNumber">Home number *</label>
+      <input type="text" class="form-control" name="homeNumber" id="homeNumber" ng-model="editPerson.phoneNumber[0].number" ng-change="invalid()" ng-pattern="/^(\+\d{1,2}\s)?\(?\d{3}\)?[\s.-]\d{3}[\s.-]\d{4}$/" required>
+      <div ng-show="form.homeNumber.$dirty && form.homeNumber.$invalid">
+        <span ng-show="form.homeNumber.$error.required">Phone is required.</span>
+        <span ng-show="form.homeNumber.$error.pattern">Please enter correct Phone (10 digits).</span>
+      </div>
     </div>
     <div class="form-group">
-      <label for="faxNumber">Fax Number *</label>
-      <input type="text" class="form-control" id="faxNumber" ng-model="editPerson.phoneNumber[0].number">
+      <label class="control-label" for="faxNumber">Fax Number *</label>
+      <input type="text" class="form-control" name="faxNumber" id="faxNumber" ng-model="editPerson.phoneNumber[1].number" ng-change="invalid()"  ng-pattern="/^(\+\d{1,2}\s)?\(?\d{3}\)?[\s.-]\d{3}[\s.-]\d{4}$/" required>
+      <div ng-show="form.faxNumber.$dirty && form.faxNumber.$invalid">
+        <span ng-show="form.faxNumber.$error.required">Fax is required.</span>
+        <span ng-show="form.faxNumber.$error.pattern">Please enter correct Phone (10 digits).</span>
+      </div>
     </div>
   </div>
   <div class="col-md-12">
     <hr>
     <a type="button" class="btn btn-default" href="#/list/">Cancel</a>
-    <a type="button" class="btn btn-primary" ng-click="update()" disabled>Update</a>
+    <button type="submit" class="btn btn-primary update" ng-disabled="!form.$dirty">Update</button>
+    <span ng-show="form.$invalid">Please correct errors in the form above. <span>
   </div>
     
 </form>
