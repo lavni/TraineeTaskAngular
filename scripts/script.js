@@ -1,9 +1,3 @@
-// function hide(){
-//     $('section').toggleClass('hide');
-//     $('header button').toggleClass('btn-primary');
-//     $('header button').toggleClass('btn-default');
-// }
-
 var myAppModule = angular.module('MyApp', []);
 
 myAppModule.factory('Persons', function() {
@@ -89,9 +83,11 @@ myAppModule.factory('Persons', function() {
 
 myAppModule.controller('PersonController',
     function(Persons, $scope) {
-        $scope.persons = Persons.query();
-
-        // $scope.hide = true;
+        if (!$scope.persons) {
+            $scope.persons = Persons.query();
+        }
+        
+        
          $scope.toggleContent = function(){
              
              $('header a').toggleClass('btn-primary');
@@ -99,15 +95,10 @@ myAppModule.controller('PersonController',
              if ($('header a').text() === 'Show Content') {
                 $('header a').text('Hide Content');
                 $('header a').attr('href', '#/list');
-             // } else if (($('header a').text() === 'Show Content') && ($('header a').attr('id') === 'person')){
-             //    $('header a').text('Hide Content');
-             //    $('header a').attr('href', '#/person/{{person.id}}');
-             // 
             } else {
                 $('header a').text('Show Content');
                 $('header a').attr('href', '#/');
              }
-             //$scope.hide = !$scope.hide;
          };
 
         $scope.sort = {
@@ -140,10 +131,8 @@ myAppModule.controller('PersonController',
            $( "#selectNumber" ).change(function() {
                 var a = $('#selectNumber option:selected').val();
                 if (a === 'fax') {
-                    //$('#num').html('{{person.phoneNumber[1].number}}')
                     $scope.n = 1;
                 } else {
-                   // $('#num').html('{{person.phoneNumber[0].number}}')
                    $scope.n = 0;
                 }
             });
@@ -163,37 +152,7 @@ myAppModule.controller('PersonController',
             $scope.showLast = true;
         }
 
-
  });
-
-myAppModule.directive('canceltext', function(){
-    return {
-       link: function postLink($scope, iElement, iAttrs){
-        iElement.text(iAttrs.canceltext);
-       }
-    }
-});
-myAppModule.directive('submittext', function(){
-    return {
-       link: function postLink($scope, iElement, iAttrs){
-        iElement.text(iAttrs.submittext);
-       }
-    }
-});
-myAppModule.directive('oncancel', function(){
-    return {
-       link: function postLink($scope, iElement, iAttrs){
-        iElement.attr('data-dismiss','modal' );
-       }
-    }
-});
-myAppModule.directive('onsubmit', function(){
-    return {
-        link: function postLink($scope, iElement, iAttrs){
-        iElement.attr('data-dismiss','modal');
-        }
-    }
-});
 
 myAppModule.config(['$routeProvider', function($routeProvider) {
     $routeProvider.
@@ -212,18 +171,27 @@ myAppModule.config(['$routeProvider', function($routeProvider) {
 
 myAppModule.controller('EditController', function(Persons, $scope, $routeParams){
     $scope.person_id = $routeParams.id;
-    $scope.persons = Persons.query();
+    $scope.persons2 = angular.copy($scope.persons);
+
+    $scope.num = 4;
     function search(){
-        for (var i=0; i < $scope.persons.length; i++){
-            if (+$scope.persons[i].id === +$scope.person_id){
-            $scope.editPerson = $scope.persons[i];
+        for (var i=0; i < $scope.persons2.length; i++){
+            if (+$scope.persons2[i].id === +$scope.person_id){
+            $scope.editPerson = $scope.persons2[i];
+            $scope.num = i;
             }
         }
     }
     search();
-    // $scope.update = function(editPerson){
-    //     $scope.persons[$scope.person_id] = angular.copy(editPerson);
-    // }
+    $scope.cancel = function(){
+        $('a.cancel').attr('href', '#/list');
+    }
+    $scope.update = function(){
+        if ($('.formEdit').hasClass('ng-valid')) {
+            $scope.persons[$scope.num] = $scope.persons2[$scope.num];//angular.copy(editPerson);
+            $('a.update').attr('href', '#/list');
+        }   
+    }
 
     $scope.invalid = function(){
         $('input.ng-invalid').parent().addClass('has-error');
@@ -231,4 +199,32 @@ myAppModule.controller('EditController', function(Persons, $scope, $routeParams)
         $('.formEdit').find('span').addClass('text-danger');
     }
 });
-//ng-pattern="^(\+\d{1,2}\s)?\(?\d{3}\)?[\s.-]\d{3}[\s.-]\d{4}$"
+
+// myAppModule.directive('canceltext', function(){
+//     return {
+//        link: function postLink($scope, iElement, iAttrs){
+//         iElement.text(iAttrs.canceltext);
+//        }
+//     }
+// });
+// myAppModule.directive('submittext', function(){
+//     return {
+//        link: function postLink($scope, iElement, iAttrs){
+//         iElement.text(iAttrs.submittext);
+//        }
+//     }
+// });
+// myAppModule.directive('oncancel', function(){
+//     return {
+//        link: function postLink($scope, iElement, iAttrs){
+//         iElement.attr('data-dismiss','modal' );
+//        }
+//     }
+// });
+// myAppModule.directive('onsubmit', function(){
+//     return {
+//         link: function postLink($scope, iElement, iAttrs){
+//         iElement.attr('data-dismiss','modal');
+//         }
+//     }
+// });

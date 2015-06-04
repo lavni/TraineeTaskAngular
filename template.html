@@ -1,4 +1,4 @@
-<form class="formEdit" name="form" novalidate ng-submit="update(editPerson)">
+<form class="formEdit" name="form" novalidate>
   <h1>Edit person: {{editPerson.firstName + ' ' + editPerson.lastName}}</h1>
   <hr>
   <div class="col-md-6">
@@ -53,8 +53,8 @@
   </div>
   <div class="col-md-12">
     <hr>
-    <a type="button" class="btn btn-default" href="#/list/">Cancel</a>
-    <button type="submit" class="btn btn-primary update" ng-disabled="!form.$dirty">Update</button>
+    <a type="button" class="btn btn-default cancel" ng-click="cancel()">Cancel</a>
+    <a type="submit" class="btn btn-primary update" ng-disabled="!form.$dirty" ng-click="update()">Update</a>
     <span ng-show="form.$invalid">Please correct errors in the form above. <span>
   </div>
     

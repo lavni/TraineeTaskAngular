@@ -50,7 +50,7 @@ th a i{
 .formEdit .col-md-12{
   text-align: right;
 }
-.formEdit button+span{
-  display:block;
+.formEdit a.update+span{
+  display: block;
   margin-top: 10px;
 }
