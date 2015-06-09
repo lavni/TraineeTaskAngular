@@ -9,9 +9,9 @@
       <th><a href="" ng-click="changeSorting('age')">Age<i class="glyphicon" ng-class="getIcon('age')"></i></a></th>
       <th><a href="" ng-click="changeSorting('address.city')">City<i class="glyphicon" ng-class="getIcon('address.city')"></i></a></th>
       <th class="select">
-        <select class="form-control" id="selectNumber" ng-click="setNumber()">
-          <option value="home">Home Phone Number</option>
-          <option value="fax">Fax Number</option> 
+        <select class="form-control" id="selectNumber" ng-model="n">
+          <option value="0">Home Phone Number</option>
+          <option value="1">Fax Number</option> 
         </select>
       </th>
       <th>Actions</th>
@@ -25,35 +25,199 @@
       <td>{{ person.address.city }}</td>
       <td id="num"> {{person.phoneNumber[n].number}} </td>
       <td>
-        <button type="button" ng-click="openInfo(person.id)" class="btn btn-default" aria-label="Left Align" data-toggle="modal" data-target="#myModal">
+        <button type="button" ng-click="openInfo(person.id)" class="btn btn-default" data-toggle="modal" data-target="#myModal">
           <span class="glyphicon glyphicon-pencil" aria-hidden="true"></span>
+        <button type="button" ng-click="openDelete(person.id)" class="btn btn-default" data-toggle="modal" data-target="#deleteModal">
+          <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
         </button>
       </td>
     </tr>
   </tbody>
 </table>
-<strong class="text-danger" ng-show="showLast">Last viewed: {{person.firstName + ' ' + person.lastName}}</strong>
+<hr>
+<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addNew">
+  <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Add New Person
+</button>
+<!-- <strong class="text-danger" ng-show="showLast">Last viewed: {{person.firstName + ' ' + person.lastName}}</strong> -->
+
+
 
   <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-        <h4 class="modal-title">{{person.firstName + ' ' + person.lastName}}</h4>
+        <h4 class="modal-title">{{personEdit.firstName + ' ' + personEdit.lastName}}</h4>
       </div>
+      <form class="formEdit" name="form" novalidate>
       <div class="modal-body">
-         <p><strong>Age: </strong>{{person.age}}</p>
-         <p><strong>Street: </strong>{{person.address.streetAddress}}</p>
-         <p><strong>City: </strong>{{person.address.city}}</p>
-         <p><strong>State: </strong>{{person.address.state}}</p>
-         <p><strong>Postal Code: </strong>{{person.address.postalCode}}</p>
-         <p><strong>Home Number: </strong>{{person.phoneNumber[0].number}}</p>
-         <p><strong>Fax Number: </strong>{{person.phoneNumber[1].number}}</p>
+         <div class="col-md-6">
+          <div class="form-group">
+            <label class="control-label" for="age">Age * </label>
+            <input type="number" class="form-control" name="age" id="age" ng-model="personEdit.age" ng-change="invalid()" max='199' min='1' required="">
+             <div ng-show="form.age.$dirty && form.age.$invalid">
+              <span ng-show="form.age.$error.required">Age is required.</span>
+              <span ng-show="form.age.$error.min">Age should be more than 0.</span>
+              <span ng-show="form.age.$error.max">Unfortunately 199 years is our current system limit.<br>Please contact Laws of Nature in case of questions.</span>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="control-label" for="street">Street</label>
+            <input type="text" class="form-control" name="street" id="street" ng-model="personEdit.address.streetAddress">
+          </div>
+          <div class="form-group">
+            <label class="control-label" for="city">City *</label>
+            <input type="text" class="form-control" name="city" id="city" ng-model="personEdit.address.city" ng-change="invalid()" ng-minlength="3" ng-maxlength="49" required>
+            <div ng-show="form.city.$dirty && form.city.$invalid">
+              <span ng-show="form.city.$error.required">City is required.</span>
+              <span ng-show="form.city.$error.minlength">City name should be more than 2 characters.</span>
+              <span ng-show="form.city.$error.maxlength">City name should be less than 50 characters.</span>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="control-label" for="state">State</label>
+            <input type="text" class="form-control" name="state" id="state" ng-model="personEdit.address.state" ng-change="invalid()" >
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="form-group">
+            <label class="control-label" for="postalCode">Postal Code</label>
+            <input type="text" class="form-control" name="postalCode" id="postalCode" ng-model="personEdit.address.postalCode" ng-change="invalid()" >
+          </div>
+          <div class="form-group">
+            <label class="control-label" for="homeNumber">Home number *</label>
+            <input type="text" class="form-control" name="homeNumber" id="homeNumber" ng-model="personEdit.phoneNumber[0].number" ng-change="invalid()" ng-pattern="/^(\+\d{1,2}\s)?\(?\d{3}\)?[\s.-]?\d{3}[\s.-]?\d{4}$/" required>
+            <div ng-show="form.homeNumber.$dirty && form.homeNumber.$invalid">
+              <span ng-show="form.homeNumber.$error.required">Phone is required.</span>
+              <span ng-show="form.homeNumber.$error.pattern">Please enter correct Phone (10 digits).</span>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="control-label" for="faxNumber">Fax Number *</label>
+            <input type="text" class="form-control" name="faxNumber" id="faxNumber" ng-model="personEdit.phoneNumber[1].number" ng-change="invalid()"  ng-pattern="/^(\+\d{1,2}\s)?\(?\d{3}\)?[\s.-]?\d{3}[\s.-]?\d{4}$/" required>
+            <div ng-show="form.faxNumber.$dirty && form.faxNumber.$invalid">
+              <span ng-show="form.faxNumber.$error.required">Fax is required.</span>
+              <span ng-show="form.faxNumber.$error.pattern">Please enter correct Phone (10 digits).</span>
+            </div>
+          </div>
+        </div>
       </div>
+      <div class="clearfix"></div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary" ng-click="save()" data-dismiss="modal">Save changes</button>
+        <a class="btn btn-default cancel" data-dismiss="modal" ng-click="onCancel()">Cancel</a>
+        <a class="btn btn-primary update" ng-disabled="disableEdit" ng-click="save(personEdit)">Submit</a>
+        <span ng-show="form.$invalid">Please correct errors in the form above. <span>
       </div>
+      </form>
     </div><!-- /.modal-content -->
   </div><!-- /.modal-dialog -->
 </div><!-- /.modal -->
+
+
+
+<!-- Modal for add new person-->
+<div class="modal fade" id="addNew" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title">Add Person</h4>
+      </div>
+      <form class="formNew" name="formNew" novalidate>
+      <div class="modal-body">
+         <div class="col-md-6">
+         <div class="form-group">
+            <label class="control-label" for="firstName">First Name * </label>
+            <input type="text" class="form-control" name="firstName" id="firstName" ng-model="newPerson.firstName" ng-change="invalidd()" required="">
+             <div ng-show="formNew.firstName.$dirty && formNew.firstName.$invalid">
+              <span ng-show="formNew.firstName.$error.required">First Name is required.</span>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="control-label" for="lastName">Last Name * </label>
+            <input type="text" class="form-control" name="lastName" id="lastName" ng-model="newPerson.lastName" ng-change="invalidd()" required="">
+             <div ng-show="formNew.lastName.$dirty && formNew.lastName.$invalid">
+              <span ng-show="formNew.lastName.$error.required">Last Name is required.</span>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="control-label" for="age">Age * </label>
+            <input type="number" class="form-control" name="age" id="age" ng-model="newPerson.age" ng-change="invalidd()" max='199' min='1' required="">
+             <div ng-show="formNew.age.$dirty && formNew.age.$invalid">
+              <span ng-show="formNew.age.$error.required">Age is required.</span>
+              <span ng-show="formNew.age.$error.number">Value is not number.</span>
+              <span ng-show="formNew.age.$error.min">Age should be more than 0.</span>
+              <span ng-show="formNew.age.$error.max">Unfortunately 199 years is our current system limit.<br>Please contact Laws of Nature in case of questions.</span>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="control-label" for="street">Street</label>
+            <input type="text" class="form-control" name="street" id="street" ng-model="newPerson.address.streetAddress">
+          </div>
+          <div class="form-group">
+            <label class="control-label" for="city">City *</label>
+            <input type="text" class="form-control" name="city" id="city" ng-model="newPerson.address.city" ng-change="invalidd()" ng-minlength="3" ng-maxlength="49" required>
+            <div ng-show="formNew.city.$dirty && formNew.city.$invalid">
+              <span ng-show="formNew.city.$error.required">City is required.</span>
+              <span ng-show="formNew.city.$error.minlength">City name should be more than 2 characters.</span>
+              <span ng-show="formNew.city.$error.maxlength">City name should be less than 50 characters.</span>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="form-group">
+            <label class="control-label" for="state">State</label>
+            <input type="text" class="form-control" name="state" id="state" ng-model="newPerson.address.state" ng-change="invalidd()">
+          </div>
+          <div class="form-group">
+            <label class="control-label" for="postalCode">Postal Code</label>
+            <input type="text" class="form-control" name="postalCode" id="postalCode" ng-model="newPerson.address.postalCode" ng-change="invalidd()" >
+          </div>
+          <div class="form-group">
+            <label class="control-label" for="homeNumber">Home number *</label>
+            <input type="text" class="form-control" name="homeNumber" id="homeNumber" ng-model="newPerson.phoneNumber[0].number" ng-change="invalidd()" ng-pattern="/^(\+\d{1,2}\s)?\(?\d{3}\)?[\s.-]?\d{3}[\s.-]?\d{4}$/" required>
+            <div ng-show="formNew.homeNumber.$dirty && formNew.homeNumber.$invalid">
+              <span ng-show="formNew.homeNumber.$error.required">Phone is required.</span>
+              <span ng-show="formNew.homeNumber.$error.pattern">Please enter correct Phone (10 digits).</span>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="control-label" for="faxNumber">Fax Number *</label>
+            <input type="text" class="form-control" name="faxNumber" id="faxNumber" ng-model="newPerson.phoneNumber[1].number" ng-change="invalidd()"  ng-pattern="/^(\+\d{1,2}\s)?\(?\d{3}\)?[\s.-]?\d{3}[\s.-]?\d{4}$/" required>
+            <div ng-show="formNew.faxNumber.$dirty && formNew.faxNumber.$invalid">
+              <span ng-show="formNew.faxNumber.$error.required">Fax is required.</span>
+              <span ng-show="formNew.faxNumber.$error.pattern">Please enter correct Phone (10 digits).</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="clearfix"></div>
+      <div class="modal-footer">
+        <a class="btn btn-default cancel" data-dismiss="modal" ng-click="onCancell()">Cancel</a>
+        <a type="submit" class="btn btn-primary update" ng-disabled="formNew.$pristine" ng-click="saveNew(newPerson)">Submit</a>
+        <span ng-show="formNew.$dirty && formNew.$invalid">Please correct errors in the form above. <span>
+      </div>
+      </form>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+
+
+<div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="myModalLabel">Delete Person</h4>
+      </div>
+      <div class="modal-body">
+        Are you sure you want to delete <strong>{{personDel.firstName + ' ' + personDel.lastName}} </strong> from the list?
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+        <button type="button" class="btn btn-primary" data-dismiss="modal" ng-click="delete(personDel.id)">Delete</button>
+      </div>
+    </div>
+  </div>
+</div>
